@@ -1,0 +1,31 @@
+FROM node:22.14 AS node
+WORKDIR /client
+
+COPY ./ClientApp .
+
+RUN npm install && npm run publish
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+COPY . .
+
+RUN dotnet publish src/Web/PubLink.Web.csproj --configuration Release --output /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y curl=7.88.1-10+deb12u8 --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g 10000 dotnet && useradd -u 10000 -g dotnet dotnet && chown -R dotnet:dotnet /app
+USER dotnet:dotnet
+
+COPY --chown=dotnet:dotnet --from=build /app/publish .
+COPY --chown=dotnet:dotnet --from=node /client/build ./wwwroot
+
+ENV ASPNETCORE_URLS=http://*:5080
+EXPOSE 5080
+
+HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD curl --fail http://localhost:5080 || exit 1
+
+ENTRYPOINT ["dotnet", "PubLink.Web.dll"]

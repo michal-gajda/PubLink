@@ -1,0 +1,11 @@
+@WebApi_HostAddress = http://localhost:5080
+
+GET {{WebApi_HostAddress}}/organizations/
+Accept: application/json
+
+###
+
+GET {{WebApi_HostAddress}}/auditLog?organizationId=e1cd1118-9795-4937-8e94-1822cae3e78f&page=1
+Accept: application/json
+
+###

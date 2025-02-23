@@ -1,0 +1,31 @@
+networks:
+  praecon-network:
+    driver: bridge
+services:
+  publink-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.Client
+    hostname: web
+    image: gajdaltd/publink-client:latest
+    environment:
+      REVERSEPROXY__CLUSTERS__WEBAPI__DESTINATIONS__DESTINATION__ADDRESS: "http://publink-api:5080"
+      REVERSEPROXY__CLUSTERS__WEBAPI__DESTINATIONS__DESTINATION__HEALTH: "http://publink-api:5080/health"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5080:5080"
+    networks:
+      - praecon-network
+    restart: unless-stopped
+  publink-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.WebApi
+    hostname: webapi
+    env_file: .env
+    image: gajdaltd/publink-api:latest
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - praecon-network
+    restart: unless-stopped
