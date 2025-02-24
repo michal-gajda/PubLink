@@ -9,7 +9,6 @@ const AuditLogList = () => {
   const [isLoadingOrganizations, setIsLoadingOrganizations] = useState(false);
   const [error, setError] = useState(null);
 
-  // Pobranie listy organizacji
   const fetchOrganizations = async () => {
     setIsLoadingOrganizations(true);
     try {
@@ -54,7 +53,7 @@ const AuditLogList = () => {
 
   useEffect(() => {
     fetchLogs();
-  }, [page, selectedOrganizationId]);
+  }, [ page, selectedOrganizationId]);
 
   const handleOrganizationChange = (event) => {
     setSelectedOrganizationId(event.target.value);
@@ -110,7 +109,7 @@ const AuditLogList = () => {
             {logs.map((log, index) => (
               <tr key={index}>
                 <td>{log.userEmail}</td>
-                <td>{log.type}</td>
+                <td>{log.type} - {log.entityType}</td>
                 <td>{log.contractNumber || '-'}</td>
                 <td>{new Date(log.startAt).toLocaleString()}</td>
                 <td>{log.duration}</td>
