@@ -9,5 +9,6 @@ internal sealed class AuditLogDto
     public TimeSpan Duration { get; init; } = TimeSpan.Zero;
     public required int? NumberOfEntitiesChanged { get; init; }
     public required Type Type { get; init; }
+    public required EntityType EntityType { get; init; }
     public required string UserEmail { get; init; }
 }

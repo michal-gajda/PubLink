@@ -32,6 +32,7 @@ internal sealed partial class ReadService(ILogger<ReadService> logger, PostgreSq
         SELECT
             user_email,
             type,
+            entity_type,
             document_header.number AS contract_number,
             cte.created_date,
             duration,

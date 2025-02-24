@@ -7,5 +7,6 @@ public sealed record class AuditLog
     public required int NumberOfEntitiesChanged { get; init; }
     public required DateTime StartAt { get; init; }
     public required string Type { get; init; }
+    public required string EntityType { get; init; }
     public required string UserEmail { get; init; }
 }
